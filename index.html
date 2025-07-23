@@ -1,0 +1,413 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Food Ninja</title>
+  <!-- materialize icons, css & js -->
+  <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" href="/css/styles.css" rel="stylesheet">
+  <script type="text/javascript" src="/js/materialize.min.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <!-- ios support -->
+  <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png">
+  <meta name="apple-mobile-web-app-status-bar" content="#FFE1C4">
+  
+  
+  <style>
+
+  body {
+
+    font-family: Arial, sans-serif;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 100vh;
+
+    margin: 0;
+
+    background-color: #fefefe;
+
+  }
+
+  .image-container {
+
+    position: relative;
+
+  }
+
+  img {
+
+    max-width: 100%;
+
+    height: auto;
+
+    cursor: pointer;
+
+  }
+
+  .enlarged-background {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 9999;
+
+  }
+
+  .enlarged-image-container {
+
+    position: relative;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 100%;
+
+  }
+
+  .enlarged-image {
+
+    max-height: 90%;
+
+    max-width: 90%;
+
+  }
+
+  .image-overlay {
+
+    position: absolute;
+
+    top: 50px;
+
+    left: 0;
+
+    width: 100%;
+
+    padding: 14px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    color: white;
+
+    font-size: 20px;
+
+    text-align: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+  }
+
+  .green-dot {
+
+    display: inline-block;
+
+    width: 15px;
+
+    height: 15px;
+
+    background-color: green;
+
+    border-radius: 50%;
+
+    margin-right: 5px;
+
+  }
+  
+  
+   .grey.lighten-4 {
+
+    background-color: #fefefe !important;
+
+  }
+  
+
+</style>
+  
+</head>
+<body class="grey lighten-4">
+
+
+
+
+
+
+
+<div class="image-container">
+
+  <img id="main-image" src="/IMG/1SMAL2025.png" alt="Obrázek 1">
+
+</div>
+
+<div class="enlarged-background">
+
+  <div class="enlarged-image-container">
+
+    <img class="enlarged-image" id="enlarged-image" src="">
+
+    <div class="image-overlay" id="image-overlay"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+  const mainImage = document.getElementById("main-image");
+
+  const enlargedBackground = document.querySelector(".enlarged-background");
+
+  const enlargedImage = document.getElementById("enlarged-image");
+
+  const imageOverlay = document.getElementById("image-overlay");
+
+
+
+  const images = [
+
+    "/IMG/1SMAL2025.png",
+
+    "/IMG/2SMAL.png",
+
+    "/IMG/3SMAL.png"
+
+  ];
+
+  const enlargedImages = [
+
+    "https://isic-card-s420300690292p.on.drv.tw/WEB/wordpress/2025/1BIG2025-small.gif",
+
+    "/IMG/2BIG.gif",
+
+    "/IMG/3BIG.png"
+
+  ];
+
+  let currentImageIndex = 0;
+
+
+
+  let touchStartX = 0;
+
+  let touchEndX = 0;
+
+
+
+  mainImage.addEventListener("touchstart", (event) => {
+
+    touchStartX = event.touches[0].clientX;
+
+  });
+
+
+
+  mainImage.addEventListener("touchend", (event) => {
+
+    touchEndX = event.changedTouches[0].clientX;
+
+    const touchDiff = touchStartX - touchEndX;
+
+
+
+    if (touchDiff > 50) {
+
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+
+      mainImage.src = images[currentImageIndex];
+
+    } else if (touchDiff < -50) {
+
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+
+      mainImage.src = images[currentImageIndex];
+
+    }
+
+  });
+
+
+
+  mainImage.addEventListener("click", () => {
+
+    const currentDate = new Date().toLocaleDateString();
+
+    const currentTime = new Date().toLocaleTimeString();
+
+    enlargedImage.src = enlargedImages[currentImageIndex];
+
+    imageOverlay.innerHTML = '<div class="text-date-time"><div class="green-dot"></div>PLATNÝ ' + currentDate + ' <span class="current-time"></span></div>';
+
+    enlargedBackground.style.display = "flex";
+
+    updateCurrentTime();
+
+  });
+
+
+
+  enlargedBackground.addEventListener("click", () => {
+
+    enlargedBackground.style.display = "none";
+
+  });
+
+
+
+  function updateCurrentTime() {
+
+    const currentTime = new Date().toLocaleTimeString();
+
+    document.querySelector(".current-time").textContent = currentTime;
+
+    setTimeout(updateCurrentTime, 1000); // Aktualizace času každou sekundu
+
+  }
+
+
+
+  updateCurrentTime(); // Spuštění aktualizace času
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- top nav --
+  <nav class="z-depth-0">
+    <div class="nav-wrapper container">
+      <a href="/">Food<span>Ninja</span></a>
+      <span class="right grey-text text-darken-1">
+        <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+      </span>
+    </div>
+  </nav>
+
+  <!-- side nav --
+  <ul id="side-menu" class="sidenav side-menu">
+    <li><a class="subheader">FOODNINJA</a></li>
+    <li><a href="/" class="waves-effect">Home</a></li>
+    <li><a href="/pages/about.html" class="waves-effect">About</a></li>
+    <li><div class="divider"></div></li>
+    <li><a href="/pages/contact.html" class="waves-effect">
+      <i class="material-icons">mail_outline</i>Contact</a>
+    </li>
+  </ul>
+
+  <!-- recipes --
+  <div class="recipes container grey-text text-darken-1">
+    <div class="card-panel recipe white row">
+      <img src="/img/dish.png" alt="recipe thumb">
+      <div class="recipe-details">
+        <div class="recipe-title">Edame Noodles</div>
+        <div class="recipe-ingredients">Edame Beans, Noodels, Garlic oil</div>
+      </div>
+      <div class="recipe-delete">
+        <i class="material-icons">delete_outline</i>
+      </div>
+    </div>
+    <div class="card-panel recipe white row">
+      <img src="/img/dish.png" alt="recipe thumb">
+      <div class="recipe-details">
+        <div class="recipe-title">Edame Noodles</div>
+        <div class="recipe-ingredients">Edame Beans, Noodels, Garlic oil</div>
+      </div>
+      <div class="recipe-delete">
+        <i class="material-icons">delete_outline</i>
+      </div>
+    </div>
+    <div class="card-panel recipe white row">
+      <img src="/img/dish.png" alt="recipe thumb">
+      <div class="recipe-details">
+        <div class="recipe-title">Edame Noodles</div>
+        <div class="recipe-ingredients">Edame Beans, Noodels, Garlic oil</div>
+      </div>
+      <div class="recipe-delete">
+        <i class="material-icons">delete_outline</i>
+      </div>
+    </div>
+    <div class="card-panel recipe white row">
+      <img src="/img/dish.png" alt="recipe thumb">
+      <div class="recipe-details">
+        <div class="recipe-title">Edame Noodles</div>
+        <div class="recipe-ingredients">Edame Beans, Noodels, Garlic oil</div>
+      </div>
+      <div class="recipe-delete">
+        <i class="material-icons">delete_outline</i>
+      </div>
+    </div>
+  </div>
+
+  <div class="center">
+    <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form">
+      <i class="material-icons">add</i>
+    </a>
+  </div>
+
+  <!-- add recipe side nav 
+  <div id="side-form" class="sidenav side-form">
+    <form class="add-recipe container section">
+      <h6 >New Recipe</h6>
+      <div class="divider"></div>
+      <div class="input-field">
+        <input placeholder="e.g. Ninja soup" id="title" type="text" class="validate">
+        <label for="title">Recipe Title</label>
+      </div>
+      <div class="input-field">
+        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
+        <label for="ingredients">Ingredients</label>
+      </div>
+      <div class="input-field center">
+        <button class="btn-small">Add</button>
+      </div>
+    </form>
+  </div>-->
+
+  <script src="/js/ui.js"></script>
+</body>
+</html>
